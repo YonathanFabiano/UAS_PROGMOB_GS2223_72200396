@@ -1,0 +1,58 @@
+@page "/menuposts"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+<PageTitle>POSTS</PageTitle>
+
+<h1>Menu Posts</h1>
+
+<p>This component demonstrates fetching data Mahasiswa from the server.</p>
+
+@if (pos == null){
+    <p><em>Loading...</em></p>
+}
+else{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ALBUM ID</th>
+                <th>ID</th>
+                <th>TITTLE</th>
+                <th>URL</th>
+                <th>THUMBNAIL URL</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in pos)
+            {
+                <tr>
+                    <td>@p.albumId</td>
+                    <td>@p.id</td>
+                    <td>@p.tittle</td>
+                    <td>@p.url</td>
+                    <td>@p.thumbnailUrl</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Posts[]? pos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pos = await Http.GetFromJsonAsync<Posts[]>("https://jsonplaceholder.typicode.com/photos");
+    }
+
+    public class Posts
+    {
+        public int albumId { get; set; }
+        public int id { get; set; }
+        public string tittle { get; set; }
+        public string url { get; set; }
+        public string thumbnailUrl { get; set; }
+    }
+}

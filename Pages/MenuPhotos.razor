@@ -1,0 +1,58 @@
+@page "/menuphotos"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+<PageTitle>PHOTOS</PageTitle>
+
+<h1>Menu Photos</h1>
+
+<p>This component demonstrates fetching data Mahasiswa from the server.</p>
+
+@if (pho == null){
+    <p><em>Loading...</em></p>
+}
+else{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ALBUM ID</th>
+                <th>ID</th>
+                <th>TITTLE</th>
+                <th>URL</th>
+                <th>THUMBNAIL URL</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in pho)
+            {
+                <tr>
+                    <td>@p.albumId</td>
+                    <td>@p.id</td>
+                    <td>@p.tittle</td>
+                    <td>@p.url</td>
+                    <td>@p.thumbnailUrl</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Photos[]? pho;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pho = await Http.GetFromJsonAsync<Photos[]>("https://jsonplaceholder.typicode.com/photos");
+    }
+
+    public class Photos
+    {
+        public int albumId { get; set; }
+        public int id { get; set; }
+        public string tittle { get; set; }
+        public string url { get; set; }
+        public string thumbnailUrl { get; set; }
+    }
+}

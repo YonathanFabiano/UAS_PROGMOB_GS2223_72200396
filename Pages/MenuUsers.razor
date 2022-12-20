@@ -1,0 +1,55 @@
+@page "/menuusers"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+<PageTitle>USERS</PageTitle>
+
+<h1>Menu Users</h1>
+
+<p>This component demonstrates fetching data Mahasiswa from the server.</p>
+
+@if (use == null){
+    <p><em>Loading...</em></p>
+}
+else{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>USERNAME</th>
+                <th>EMAIL</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in use)
+            {
+                <tr>
+                    <td>@u.id</td>
+                    <td>@u.name</td>
+                    <td>@u.username</td>
+                    <td>@u.email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Posts[]? use;
+
+    protected override async Task OnInitializedAsync()
+    {
+        use = await Http.GetFromJsonAsync<Posts[]>("https://jsonplaceholder.typicode.com/photos");
+    }
+
+    public class Posts
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string username { get; set; }
+        public string email { get; set; }
+    }
+}

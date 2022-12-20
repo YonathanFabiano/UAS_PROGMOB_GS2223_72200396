@@ -1,0 +1,58 @@
+@page "/menucomments"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+<PageTitle>COMMENTS</PageTitle>
+
+<h1>Menu Comments</h1>
+
+<p>This component demonstrates fetching data Mahasiswa from the server.</p>
+
+@if (com == null){
+    <p><em>Loading...</em></p>
+}
+else{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>POST ID</th>
+                <th>ID</th>
+                <th>NAMA</th>
+                <th>EMAIL</th>
+                <th>BODY</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in com)
+            {
+                <tr>
+                    <td>@c.postId</td>
+                    <td>@c.id</td>
+                    <td>@c.name</td>
+                    <td>@c.email</td>
+                    <td>@c.body</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Comments[]? com;
+
+    protected override async Task OnInitializedAsync()
+    {
+        com = await Http.GetFromJsonAsync<Comments[]>("https://jsonplaceholder.typicode.com/comments");
+    }
+
+    public class Comments
+    {
+        public int postId { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public string email { get; set; }
+        public string body { get; set; }
+    }
+}
